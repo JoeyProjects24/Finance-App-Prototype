@@ -5,379 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Finance App</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --system-blue: #007AFF;
-      --system-green: #34C759;
-      --system-red: #FF3B30;
-      --system-gray: #8E8E93;
-      --system-gray-light: #F2F2F7;
-      --system-background: #FFFFFF;
-      --card-background: rgba(255, 255, 255, 0.8);
-      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #F5F7FA 0%, #E4E9F2 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      color: #1C1C1E;
-    }
-    
-    /* Main Content */
-    .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      overflow-y: auto;
-    }
-    
-    .card {
-      background: var(--card-background);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 14px;
-      box-shadow: var(--card-shadow);
-      width: 100%;
-      max-width: 400px;
-      padding: 24px;
-      margin-bottom: 20px;
-      border: 0.5px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    h1 {
-      font-size: 28px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-    
-    /* Input Elements */
-    .input-group {
-      margin-bottom: 16px;
-    }
-    
-    label {
-      display: block;
-      font-size: 13px;
-      color: var(--system-gray);
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-    
-    input, select {
-      width: 100%;
-      padding: 12px 16px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: none;
-      background-color: var(--system-gray-light);
-      appearance: none;
-      -webkit-appearance: none;
-    }
-    
-    input:focus, select:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px var(--system-blue);
-    }
-    
-    /* iOS-style Switch */
-    .switch-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 20px 0;
-    }
-    
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 52px;
-      height: 32px;
-    }
-    
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 32px;
-    }
-    
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 28px;
-      width: 28px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    
-    input:checked + .slider {
-      background-color: var(--system-blue);
-    }
-    
-    input:checked + .slider:before {
-      transform: translateX(20px);
-    }
-    
-    /* Button */
-    button {
-      background-color: var(--system-blue);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 500;
-      width: 100%;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    button:active {
-      opacity: 0.8;
-      transform: scale(0.98);
-    }
-    
-    /* Secondary Button */
-    .secondary-btn {
-      background-color: var(--system-gray-light);
-      color: var(--system-gray);
-    }
-    
-    .danger-btn {
-      background-color: var(--system-red);
-      color: white;
-    }
-    
-    .success-btn {
-      background-color: var(--system-green);
-      color: white;
-    }
-    
-    /* Result Display */
-    .result {
-      margin-top: 24px;
-      padding: 16px;
-      background-color: var(--system-gray-light);
-      border-radius: 10px;
-      text-align: center;
-      font-size: 16px;
-    }
-    
-    /* History */
-    .history {
-      margin-top: 20px;
-    }
-    
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    
-    .history h3 {
-      font-size: 17px;
-      color: var(--system-gray);
-    }
-    
-    .history-list {
-      list-style: none;
-    }
-    
-    .history-list li {
-      padding: 12px 0;
-      border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
-      font-size: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .history-list li .expense-amount {
-      font-weight: 600;
-    }
-    
-    /* App Switcher */
-    .app-switcher {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    
-    .app-switcher button {
-      width: auto;
-      padding: 10px 20px;
-      margin: 0 5px;
-      border-radius: 20px;
-    }
-    
-    .app-switcher button.active {
-      background-color: var(--system-blue);
-      color: white;
-    }
-    
-    .app-switcher button:not(.active) {
-      background-color: var(--system-gray-light);
-      color: var(--system-gray);
-    }
-    
-    /* Navigation */
-    .nav-buttons {
-      display: flex;
-      justify-content: center;
-      margin-top: auto;
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 400px;
-    }
-    
-    .nav-buttons button {
-      width: auto;
-      padding: 10px 20px;
-      margin: 0 5px;
-      border-radius: 20px;
-    }
-    
-    /* View Expense Button */
-    .view-expenses-btn {
-      margin-top: 10px;
-    }
-    
-    /* Budget Progress */
-    .budget-progress {
-      margin: 20px 0;
-    }
-    
-    .progress-bar {
-      height: 10px;
-      background-color: var(--system-gray-light);
-      border-radius: 5px;
-      margin-top: 10px;
-      overflow: hidden;
-    }
-    
-    .progress {
-      height: 100%;
-      background-color: var(--system-green);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-    
-    .progress.over-budget {
-      background-color: var(--system-red);
-    }
-    
-    .budget-stats {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 5px;
-      font-size: 14px;
-    }
-    
-    /* Budget Summary */
-    .budget-summary {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: var(--system-gray-light);
-      border-radius: 10px;
-    }
-    
-    .budget-summary-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-    
-    .budget-summary-item:last-child {
-      margin-bottom: 0;
-      padding-top: 8px;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      font-weight: 600;
-    }
-    
-    /* Dark Mode */
-    body.dark {
-      background: linear-gradient(135deg, #121212 0%, #000000 100%);
-      color: #FFFFFF;
-    }
-    
-    body.dark .card {
-      background: rgba(28, 28, 30, 0.8);
-      border: 0.5px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    body.dark input,
-    body.dark select {
-      background-color: #2C2C2E;
-      color: white;
-    }
-    
-    body.dark .result,
-    body.dark .budget-summary {
-      background-color: #2C2C2E;
-    }
-    
-    body.dark .history-list li,
-    body.dark .budget-summary-item:last-child {
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    body.dark .secondary-btn {
-      background-color: #2C2C2E;
-      color: white;
-    }
-    
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .card {
-      animation: fadeIn 0.3s ease-out;
-    }
-    
-    /* Hidden elements */
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <!-- Main Content -->
   <div class="container">
-    <div class="app-switcher">
-      <button id="expensesBtn" class="active" onclick="switchApp('addExpense')">Add Expense</button>
-      <button id="budgetBtn" onclick="switchApp('budget')">Budget</button>
-      <button id="converterBtn" onclick="switchApp('converter')">Currency</button>
-    </div>
+<div class="app-switcher">
+  <button id="expensesBtn" class="active" onclick="switchApp('addExpense')">Add Expense</button>
+  <button id="budgetBtn" onclick="switchApp('budget')">Budget</button>
+  <button id="reportsBtn" onclick="switchApp('reports')">Reports</button>
+  <button id="converterBtn" onclick="switchApp('converter')">Currency</button>
+</div>
     
     <!-- Add Expense Card -->
     <div class="card" id="addExpenseCard">
@@ -506,6 +145,50 @@
       </div>
     </div>
   </div>
+
+  <!-- Reports Card -->
+<div class="card hidden" id="reportsCard">
+  <h1>Spending Reports</h1>
+  
+  <div class="input-group">
+    <label>Report Period</label>
+    <select id="reportPeriod" onchange="generateReport()">
+      <option value="week">Weekly</option>
+      <option value="month">Monthly</option>
+      <option value="custom">Custom Range</option>
+    </select>
+  </div>
+  
+  <div class="input-group" id="customRangeGroup" style="display: none;">
+    <label>Custom Range</label>
+    <div style="display: flex; gap: 10px;">
+      <input type="date" id="startDate" style="flex: 1;">
+      <input type="date" id="endDate" style="flex: 1;">
+    </div>
+  </div>
+  
+  <div class="chart-container" style="margin-top: 20px;">
+    <canvas id="spendingChart"></canvas>
+  </div>
+  
+  <div class="report-summary" style="margin-top: 20px;">
+    <h3>Summary</h3>
+    <div class="budget-summary-item">
+      <span>Total Spent:</span>
+      <span id="totalSpent">$0</span>
+    </div>
+    <div class="budget-summary-item">
+      <span>Average Daily:</span>
+      <span id="avgDaily">$0</span>
+    </div>
+    <div class="budget-summary-item">
+      <span>Highest Day:</span>
+      <span id="highestDay">$0</span>
+    </div>
+  </div>
+  
+  <button class="secondary-btn" onclick="switchApp('addExpense')">Back to Expenses</button>
+</div>
   
   <!-- Settings Button at Bottom -->
   <div class="nav-buttons">
@@ -874,38 +557,50 @@
     }
     
     // Switch between apps
-    function switchApp(app) {
-      // Hide all cards first
-      converterCard.classList.add("hidden");
-      addExpenseCard.classList.add("hidden");
-      viewExpensesCard.classList.add("hidden");
-      budgetCard.classList.add("hidden");
-      settingsCard.classList.add("hidden");
-      
-      // Remove active class from all buttons
-      converterBtn.classList.remove("active");
-      expensesBtn.classList.remove("active");
-      budgetBtn.classList.remove("active");
-      
-      // Show selected card and set active button
-      if (app === 'converter') {
-        converterCard.classList.remove("hidden");
-        converterBtn.classList.add("active");
-      } else if (app === 'addExpense') {
-        addExpenseCard.classList.remove("hidden");
-        expensesBtn.classList.add("active");
-      } else if (app === 'viewExpenses') {
-        viewExpensesCard.classList.remove("hidden");
-        renderExpenses(); // Refresh the list when viewing
-      } else if (app === 'budget') {
-        budgetCard.classList.remove("hidden");
-        budgetBtn.classList.add("active");
-        loadBudget(); // Load budget data when viewing
-      } else if (app === 'settings') {
-        settingsCard.classList.remove("hidden");
-        // No button to highlight for settings
-      }
-    }
+function switchApp(app) {
+  // Hide all cards first
+  converterCard.classList.add("hidden");
+  addExpenseCard.classList.add("hidden");
+  viewExpensesCard.classList.add("hidden");
+  budgetCard.classList.add("hidden");
+  settingsCard.classList.add("hidden");
+  reportsCard.classList.add("hidden");
+  
+  // Remove active class from all buttons
+  converterBtn.classList.remove("active");
+  expensesBtn.classList.remove("active");
+  budgetBtn.classList.remove("active");
+  reportsBtn.classList.remove("active");
+  
+  // Show selected card and set active button
+  if (app === 'converter') {
+    converterCard.classList.remove("hidden");
+    converterBtn.classList.add("active");
+  } else if (app === 'addExpense') {
+    addExpenseCard.classList.remove("hidden");
+    expensesBtn.classList.add("active");
+  } else if (app === 'viewExpenses') {
+    viewExpensesCard.classList.remove("hidden");
+    renderExpenses();
+  } else if (app === 'budget') {
+    budgetCard.classList.remove("hidden");
+    budgetBtn.classList.add("active");
+    loadBudget();
+  } else if (app === 'settings') {
+    settingsCard.classList.remove("hidden");
+  } else if (app === 'reports') {
+    reportsCard.classList.remove("hidden");
+    reportsBtn.classList.add("active");
+    // Set default dates for custom range
+    const today = new Date().toISOString().split('T')[0];
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    const weekAgoStr = weekAgo.toISOString().split('T')[0];
+    startDate.value = weekAgoStr;
+    endDate.value = today;
+    generateReport();
+  }
+}
     
     // Toggle dark mode
     function toggleDarkMode() {
@@ -950,6 +645,183 @@
         }
       });
     };
+    // DOM elements for reports
+const reportsBtn = document.getElementById("reportsBtn");
+const reportsCard = document.getElementById("reportsCard");
+const reportPeriod = document.getElementById("reportPeriod");
+const customRangeGroup = document.getElementById("customRangeGroup");
+const startDate = document.getElementById("startDate");
+const endDate = document.getElementById("endDate");
+let spendingChart = null;
+
+// Toggle custom date range visibility
+reportPeriod.addEventListener("change", function() {
+  customRangeGroup.style.display = this.value === "custom" ? "block" : "none";
+});
+
+// Generate spending report
+function generateReport() {
+  const period = reportPeriod.value;
+  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  const budget = JSON.parse(localStorage.getItem("budget")) || {};
+  const currency = budget.currency || "USD";
+  
+  // Filter expenses by currency
+  const filteredExpenses = expenses.filter(e => e.currency === currency);
+  
+  if (filteredExpenses.length === 0) {
+    alert(`No expenses found in ${currency}`);
+    return;
+  }
+  
+  let dateRanges = [];
+  let labels = [];
+  let data = [];
+  
+  const now = new Date();
+  
+  if (period === "week") {
+    // Weekly report - last 7 days
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toLocaleDateString(undefined, { weekday: 'short' });
+      
+      labels.push(dateStr);
+      
+      const dayStart = new Date(date);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(date);
+      dayEnd.setHours(23, 59, 59, 999);
+      
+      const dayExpenses = filteredExpenses.filter(e => {
+        const expenseDate = new Date(e.timestamp);
+        return expenseDate >= dayStart && expenseDate <= dayEnd;
+      });
+      
+      const dayTotal = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
+      data.push(dayTotal);
+    }
+  } 
+  else if (period === "month") {
+    // Monthly report - last 30 days
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+      
+      labels.push(dateStr);
+      
+      const dayStart = new Date(date);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(date);
+      dayEnd.setHours(23, 59, 59, 999);
+      
+      const dayExpenses = filteredExpenses.filter(e => {
+        const expenseDate = new Date(e.timestamp);
+        return expenseDate >= dayStart && expenseDate <= dayEnd;
+      });
+      
+      const dayTotal = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
+      data.push(dayTotal);
+    }
+  }
+  else if (period === "custom") {
+    // Custom date range
+    if (!startDate.value || !endDate.value) {
+      alert("Please select both start and end dates");
+      return;
+    }
+    
+    const start = new Date(startDate.value);
+    const end = new Date(endDate.value);
+    
+    if (start > end) {
+      alert("Start date must be before end date");
+      return;
+    }
+    
+    // Calculate days between dates
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    for (let i = 0; i <= diffDays; i++) {
+      const date = new Date(start);
+      date.setDate(date.getDate() + i);
+      const dateStr = date.toLocaleDateString();
+      
+      labels.push(dateStr);
+      
+      const dayStart = new Date(date);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = new Date(date);
+      dayEnd.setHours(23, 59, 59, 999);
+      
+      const dayExpenses = filteredExpenses.filter(e => {
+        const expenseDate = new Date(e.timestamp);
+        return expenseDate >= dayStart && expenseDate <= dayEnd;
+      });
+      
+      const dayTotal = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
+      data.push(dayTotal);
+    }
+  }
+  
+  // Update summary
+  const total = data.reduce((sum, val) => sum + val, 0);
+  const avg = total / data.length;
+  const max = Math.max(...data);
+  
+  document.getElementById("totalSpent").textContent = `${total.toFixed(2)} ${currency}`;
+  document.getElementById("avgDaily").textContent = `${avg.toFixed(2)} ${currency}`;
+  document.getElementById("highestDay").textContent = `${max.toFixed(2)} ${currency}`;
+  
+  // Create or update chart
+  const ctx = document.getElementById('spendingChart').getContext('2d');
+  
+  if (spendingChart) {
+    spendingChart.destroy();
+  }
+  
+  spendingChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: `Spending (${currency})`,
+        data: data,
+        backgroundColor: '#007AFF',
+        borderColor: '#007AFF',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: `Amount (${currency})`
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Date'
+          }
+        }
+      }
+    }
+  });
+}
+// Initialize dates for reports
+const today = new Date().toISOString().split('T')[0];
+const weekAgo = new Date();
+weekAgo.setDate(weekAgo.getDate() - 7);
+const weekAgoStr = weekAgo.toISOString().split('T')[0];
+document.getElementById("startDate").value = weekAgoStr;
+document.getElementById("endDate").value = today;
   </script>
 </body>
 </html>
