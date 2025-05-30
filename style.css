@@ -1,0 +1,386 @@
+:root {
+  --system-blue: #007AFF;
+  --system-green: #34C759;
+  --system-red: #FF3B30;
+  --system-gray: #8E8E93;
+  --system-gray-light: #F2F2F7;
+  --system-background: #FFFFFF;
+  --card-background: rgba(255, 255, 255, 0.8);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #F5F7FA 0%, #E4E9F2 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #1C1C1E;
+  padding-bottom: 80px; /* Space for fixed button */
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.card {
+  background: var(--card-background);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px;
+  box-shadow: var(--card-shadow);
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  margin: 0 auto;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Fixed Settings Button */
+.settings-btn-container {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none; /* Allows clicks to pass through to content beneath */
+}
+
+.settings-btn {
+  pointer-events: auto; /* Re-enable clicks for the button */
+  background-color: var(--system-blue);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s;
+  width: auto;
+  max-width: calc(100% - 40px);
+}
+
+.settings-btn:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* Rest of your styles */
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--system-gray);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--system-gray-light);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--system-blue);
+}
+
+.switch-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 32px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 32px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 28px;
+  width: 28px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--system-blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+button {
+  background-color: var(--system-blue);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+.secondary-btn {
+  background-color: var(--system-gray-light);
+  color: var(--system-gray);
+}
+
+.danger-btn {
+  background-color: var(--system-red);
+  color: white;
+}
+
+.success-btn {
+  background-color: var(--system-green);
+  color: white;
+}
+
+.result {
+  margin-top: 24px;
+  padding: 16px;
+  background-color: var(--system-gray-light);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.history {
+  margin-top: 20px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.history h3 {
+  font-size: 17px;
+  color: var(--system-gray);
+}
+
+.history-list {
+  list-style: none;
+}
+
+.history-list li {
+  padding: 12px 0;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-list li .expense-amount {
+  font-weight: 600;
+}
+
+.app-switcher {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.app-switcher button {
+  width: auto;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 20px;
+}
+
+.app-switcher button.active {
+  background-color: var(--system-blue);
+  color: white;
+}
+
+.app-switcher button:not(.active) {
+  background-color: var(--system-gray-light);
+  color: var(--system-gray);
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.nav-buttons button {
+  width: auto;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 20px;
+}
+
+.view-expenses-btn {
+  margin-top: 10px;
+}
+
+.budget-progress {
+  margin: 20px 0;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: var(--system-gray-light);
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: var(--system-green);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress.over-budget {
+  background-color: var(--system-red);
+}
+
+.budget-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.budget-summary {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: var(--system-gray-light);
+  border-radius: 10px;
+}
+
+.budget-summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.budget-summary-item:last-child {
+  margin-bottom: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+}
+
+body.dark {
+  background: linear-gradient(135deg, #121212 0%, #000000 100%);
+  color: #FFFFFF;
+}
+
+body.dark .card {
+  background: rgba(28, 28, 30, 0.8);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark input,
+body.dark select {
+  background-color: #2C2C2E;
+  color: white;
+}
+
+body.dark .result,
+body.dark .budget-summary {
+  background-color: #2C2C2E;
+}
+
+body.dark .history-list li,
+body.dark .budget-summary-item:last-child {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .secondary-btn {
+  background-color: #2C2C2E;
+  color: white;
+}
+
+body.dark .settings-btn {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.hidden {
+  display: none;
+}
