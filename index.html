@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --system-blue: #007AFF;
+      --system-green: #34C759;
+      --system-red: #FF3B30;
+      --system-gray: #8E8E93;
+      --system-gray-light: #F2F2F7;
+      --system-background: #FFFFFF;
+      --card-background: rgba(255, 255, 255, 0.8);
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #F5F7FA 0%, #E4E9F2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1C1C1E;
+    }
+    
+    /* Main Content */
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .card {
+      background: var(--card-background);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 14px;
+      box-shadow: var(--card-shadow);
+      width: 100%;
+      max-width: 400px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 0.5px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    /* Input Elements */
+    .input-group {
+      margin-bottom: 16px;
+    }
+    
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--system-gray);
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      background-color: var(--system-gray-light);
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--system-blue);
+    }
+    
+    /* iOS-style Switch */
+    .switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+    
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 32px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 32px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 28px;
+      width: 28px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: var(--system-blue);
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+    
+    /* Button */
+    button {
+      background-color: var(--system-blue);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 500;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    button:active {
+      opacity: 0.8;
+      transform: scale(0.98);
+    }
+    
+    /* Secondary Button */
+    .secondary-btn {
+      background-color: var(--system-gray-light);
+      color: var(--system-gray);
+    }
+    
+    .danger-btn {
+      background-color: var(--system-red);
+      color: white;
+    }
+    
+    .success-btn {
+      background-color: var(--system-green);
+      color: white;
+    }
+    
+    /* Result Display */
+    .result {
+      margin-top: 24px;
+      padding: 16px;
+      background-color: var(--system-gray-light);
+      border-radius: 10px;
+      text-align: center;
+      font-size: 16px;
+    }
+    
+    /* History */
+    .history {
+      margin-top: 20px;
+    }
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .history h3 {
+      font-size: 17px;
+      color: var(--system-gray);
+    }
+    
+    .history-list {
+      list-style: none;
+    }
+    
+    .history-list li {
+      padding: 12px 0;
+      border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .history-list li .expense-amount {
+      font-weight: 600;
+    }
+    
+    /* App Switcher */
+    .app-switcher {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .app-switcher button {
+      width: auto;
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 20px;
+    }
+    
+    .app-switcher button.active {
+      background-color: var(--system-blue);
+      color: white;
+    }
+    
+    .app-switcher button:not(.active) {
+      background-color: var(--system-gray-light);
+      color: var(--system-gray);
+    }
+    
+    /* Navigation */
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      margin-top: auto;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .nav-buttons button {
+      width: auto;
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 20px;
+    }
+    
+    /* View Expense Button */
+    .view-expenses-btn {
+      margin-top: 10px;
+    }
+    
+    /* Budget Progress */
+    .budget-progress {
+      margin: 20px 0;
+    }
+    
+    .progress-bar {
+      height: 10px;
+      background-color: var(--system-gray-light);
+      border-radius: 5px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    
+    .progress {
+      height: 100%;
+      background-color: var(--system-green);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    .progress.over-budget {
+      background-color: var(--system-red);
+    }
+    
+    .budget-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+    
+    /* Budget Summary */
+    .budget-summary {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: var(--system-gray-light);
+      border-radius: 10px;
+    }
+    
+    .budget-summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    
+    .budget-summary-item:last-child {
+      margin-bottom: 0;
+      padding-top: 8px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      font-weight: 600;
+    }
+    
+    /* Dark Mode */
+    body.dark {
+      background: linear-gradient(135deg, #121212 0%, #000000 100%);
+      color: #FFFFFF;
+    }
+    
+    body.dark .card {
+      background: rgba(28, 28, 30, 0.8);
+      border: 0.5px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    body.dark input,
+    body.dark select {
+      background-color: #2C2C2E;
+      color: white;
+    }
+    
+    body.dark .result,
+    body.dark .budget-summary {
+      background-color: #2C2C2E;
+    }
+    
+    body.dark .history-list li,
+    body.dark .budget-summary-item:last-child {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    body.dark .secondary-btn {
+      background-color: #2C2C2E;
+      color: white;
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .card {
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    /* Hidden elements */
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Content -->
+  <div class="container">
+    <div class="app-switcher">
+      <button id="expensesBtn" class="active" onclick="switchApp('addExpense')">Add Expense</button>
+      <button id="budgetBtn" onclick="switchApp('budget')">Budget</button>
+      <button id="converterBtn" onclick="switchApp('converter')">Currency</button>
+    </div>
+    
+    <!-- Add Expense Card -->
+    <div class="card" id="addExpenseCard">
+      <h1>Add New Expense</h1>
+      
+      <div class="input-group">
+        <label>Title</label>
+        <input type="text" id="expenseTitle" placeholder="Enter expense title" />
+      </div>
+      
+      <div class="input-group">
+        <label>Description</label>
+        <input type="text" id="expenseDesc" placeholder="Enter description (optional)" />
+      </div>
+      
+      <div class="input-group">
+        <label>Amount</label>
+        <input type="number" id="expenseAmount" placeholder="Enter amount" inputmode="decimal" />
+      </div>
+      
+      <div class="input-group">
+        <label>Currency</label>
+        <select id="expenseCurrency"></select>
+      </div>
+      
+      <button onclick="addExpense()">Add Expense</button>
+      
+      <button class="view-expenses-btn secondary-btn" onclick="switchApp('viewExpenses')">View All Expenses</button>
+    </div>
+    
+    <!-- View Expenses Card -->
+    <div class="card hidden" id="viewExpensesCard">
+      <h1>Expense History</h1>
+      
+      <div class="history">
+        <div class="history-header">
+          <h3>Your Expenses</h3>
+          <button class="danger-btn" onclick="clearExpenses()">Clear All</button>
+        </div>
+        <ul class="history-list" id="expensesList"></ul>
+      </div>
+      
+      <button class="secondary-btn" onclick="switchApp('addExpense')">Add New Expense</button>
+    </div>
+    
+    <!-- Budget Card -->
+    <div class="card hidden" id="budgetCard">
+      <h1>Budget Tracker</h1>
+      
+      <div class="input-group">
+        <label>Budget Period</label>
+        <select id="budgetPeriod" onchange="loadBudget()">
+          <option value="month">Monthly</option>
+          <option value="week">Weekly</option>
+        </select>
+      </div>
+      
+      <div class="input-group">
+        <label>Budget Currency</label>
+        <select id="budgetCurrency"></select>
+      </div>
+      
+      <div class="input-group">
+        <label>Budget Amount</label>
+        <input type="number" id="budgetAmount" placeholder="Enter budget amount" inputmode="decimal" />
+      </div>
+      
+      <button class="success-btn" onclick="saveBudget()">Save Budget</button>
+      
+      <div class="budget-progress">
+        <h3>Budget Progress</h3>
+        <div class="progress-bar">
+          <div class="progress" id="budgetProgressBar"></div>
+        </div>
+        <div class="budget-stats">
+          <span id="spentAmount">$0 spent</span>
+          <span id="remainingAmount">$0 remaining</span>
+        </div>
+      </div>
+      
+      <div class="budget-summary">
+        <div class="budget-summary-item">
+          <span>Budget:</span>
+          <span id="budgetSummaryAmount">$0</span>
+        </div>
+        <div class="budget-summary-item">
+          <span>Spent:</span>
+          <span id="budgetSummarySpent">$0</span>
+        </div>
+        <div class="budget-summary-item">
+          <span>Remaining:</span>
+          <span id="budgetSummaryRemaining">$0</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Currency Converter Card -->
+    <div class="card hidden" id="converterCard">
+      <h1>Currency Converter</h1>
+      
+      <div class="input-group">
+        <label>Amount</label>
+        <input type="number" id="amount" placeholder="Enter amount" inputmode="decimal" />
+      </div>
+      
+      <div class="input-group">
+        <label>From Currency</label>
+        <select id="fromCurrency"></select>
+      </div>
+      
+      <div class="input-group">
+        <label>To Currency</label>
+        <select id="toCurrency"></select>
+      </div>
+      
+      <button onclick="convertCurrency()">Convert</button>
+      
+      <div class="result" id="result">Converted amount will appear here</div>
+      
+      <div class="history">
+        <div class="history-header">
+          <h3>Conversion History</h3>
+          <button class="secondary-btn" onclick="clearHistory()">Clear History</button>
+        </div>
+        <ul class="history-list" id="history"></ul>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Settings Button at Bottom -->
+  <div class="nav-buttons">
+    <button class="secondary-btn" onclick="switchApp('settings')">Settings</button>
+  </div>
+  
+  <!-- Settings Card (Hidden by default) -->
+  <div class="card hidden" id="settingsCard">
+    <h1>Settings</h1>
+    
+    <div class="switch-container">
+      <span>Dark Mode</span>
+      <label class="switch">
+        <input type="checkbox" id="darkModeSwitch" onchange="toggleDarkMode()">
+        <span class="slider"></span>
+      </label>
+    </div>
+    
+    <button class="danger-btn" onclick="clearAllData()">Clear All App Data</button>
+    
+    <button class="secondary-btn" onclick="switchApp('addExpense')">Back to Expenses</button>
+  </div>
+  
+  <script>
+    // DOM Elements
+    const fromCurrency = document.getElementById("fromCurrency");
+    const toCurrency = document.getElementById("toCurrency");
+    const expenseCurrency = document.getElementById("expenseCurrency");
+    const budgetCurrency = document.getElementById("budgetCurrency");
+    const result = document.getElementById("result");
+    const darkModeSwitch = document.getElementById("darkModeSwitch");
+    const converterBtn = document.getElementById("converterBtn");
+    const expensesBtn = document.getElementById("expensesBtn");
+    const budgetBtn = document.getElementById("budgetBtn");
+    const converterCard = document.getElementById("converterCard");
+    const addExpenseCard = document.getElementById("addExpenseCard");
+    const viewExpensesCard = document.getElementById("viewExpensesCard");
+    const budgetCard = document.getElementById("budgetCard");
+    const settingsCard = document.getElementById("settingsCard");
+    
+    // Budget elements
+    const budgetPeriod = document.getElementById("budgetPeriod");
+    const budgetAmount = document.getElementById("budgetAmount");
+    const budgetProgressBar = document.getElementById("budgetProgressBar");
+    const spentAmount = document.getElementById("spentAmount");
+    const remainingAmount = document.getElementById("remainingAmount");
+    const budgetSummaryAmount = document.getElementById("budgetSummaryAmount");
+    const budgetSummarySpent = document.getElementById("budgetSummarySpent");
+    const budgetSummaryRemaining = document.getElementById("budgetSummaryRemaining");
+    
+    const API_URL = "https://api.frankfurter.app";
+    
+    // Populate currency dropdowns
+    async function populateCurrencies() {
+      try {
+        const res = await fetch(`${API_URL}/currencies`);
+        const currencies = await res.json();
+        
+        // Clear any existing options first
+        fromCurrency.innerHTML = '';
+        toCurrency.innerHTML = '';
+        expenseCurrency.innerHTML = '';
+        budgetCurrency.innerHTML = '';
+        
+        for (let code in currencies) {
+          let option1 = new Option(`${code} - ${currencies[code]}`, code);
+          let option2 = new Option(`${code} - ${currencies[code]}`, code);
+          let option3 = new Option(`${code} - ${currencies[code]}`, code);
+          let option4 = new Option(`${code} - ${currencies[code]}`, code);
+          fromCurrency.add(option1);
+          toCurrency.add(option2);
+          expenseCurrency.add(option3);
+          budgetCurrency.add(option4);
+        }
+        
+        // Set default values after populating
+        fromCurrency.value = "USD";
+        toCurrency.value = "EUR";
+        expenseCurrency.value = "USD";
+        budgetCurrency.value = "USD";
+        
+      } catch (error) {
+        console.error("Error fetching currencies:", error);
+        result.textContent = "Error loading currencies. Please try again later.";
+      }
+    }
+    
+    // Convert currency
+    function convertCurrency() {
+      const amount = document.getElementById("amount").value;
+      const from = fromCurrency.value;
+      const to = toCurrency.value;
+      
+      if (!amount || isNaN(amount)) {
+        result.textContent = "Please enter a valid amount";
+        return;
+      }
+      
+      if (from === to) {
+        result.textContent = "Please select different currencies";
+        return;
+      }
+      
+      // Show loading state
+      result.textContent = "Converting...";
+      
+      fetch(`${API_URL}/latest?amount=${amount}&from=${from}&to=${to}`)
+        .then(res => res.json())
+        .then(data => {
+          const converted = `${amount} ${from} = ${data.rates[to].toFixed(2)} ${to}`;
+          result.textContent = converted;
+          
+          // Save to history
+          let history = JSON.parse(localStorage.getItem("conversionHistory")) || [];
+          history.unshift({
+            date: new Date().toLocaleString(),
+            conversion: converted
+          });
+          history = history.slice(0, 5); // Keep only 5 most recent
+          localStorage.setItem("conversionHistory", JSON.stringify(history));
+          renderHistory();
+        })
+        .catch(error => {
+          result.textContent = "Error converting currency";
+          console.error(error);
+        });
+    }
+    
+    // Render conversion history
+    function renderHistory() {
+      const historyList = document.getElementById("history");
+      historyList.innerHTML = "";
+      
+      const history = JSON.parse(localStorage.getItem("conversionHistory")) || [];
+      
+      if (history.length === 0) {
+        historyList.innerHTML = "<li>No conversion history yet</li>";
+        return;
+      }
+      
+      history.forEach(item => {
+        const li = document.createElement("li");
+        li.innerHTML = `<div>${item.conversion}</div><small>${item.date}</small>`;
+        historyList.appendChild(li);
+      });
+    }
+    
+    // Clear history
+    function clearHistory() {
+      localStorage.removeItem("conversionHistory");
+      renderHistory();
+    }
+    
+    // Add expense
+    function addExpense() {
+      const title = document.getElementById("expenseTitle").value;
+      const desc = document.getElementById("expenseDesc").value;
+      const amount = document.getElementById("expenseAmount").value;
+      const currency = expenseCurrency.value;
+      
+      if (!title || !amount || isNaN(amount)) {
+        alert("Please enter a valid title and amount");
+        return;
+      }
+      
+      const expense = {
+        id: Date.now(),
+        title: title,
+        desc: desc,
+        amount: parseFloat(amount),
+        currency: currency,
+        date: new Date().toLocaleString(),
+        timestamp: Date.now()
+      };
+      
+      let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+      expenses.unshift(expense);
+      localStorage.setItem("expenses", JSON.stringify(expenses));
+      
+      // Clear inputs
+      document.getElementById("expenseTitle").value = "";
+      document.getElementById("expenseDesc").value = "";
+      document.getElementById("expenseAmount").value = "";
+      
+      renderExpenses();
+      
+      // Update budget if on budget screen
+      if (!budgetCard.classList.contains("hidden")) {
+        updateBudgetProgress();
+      }
+      
+      // Show success message
+      alert("Expense added successfully!");
+    }
+    
+    // Render expenses
+    function renderExpenses() {
+      const expensesList = document.getElementById("expensesList");
+      expensesList.innerHTML = "";
+      
+      const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+      
+      if (expenses.length === 0) {
+        expensesList.innerHTML = "<li>No expenses recorded yet</li>";
+        return;
+      }
+      
+      expenses.forEach(expense => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div>
+            <strong>${expense.title}</strong>
+            ${expense.desc ? `<small>${expense.desc}</small>` : ''}
+            <small>${expense.date}</small>
+          </div>
+          <div class="expense-amount">
+            ${expense.amount.toFixed(2)} ${expense.currency}
+            <button class="danger-btn" style="margin-left: 10px; padding: 5px 10px;" onclick="deleteExpense(${expense.id})">Delete</button>
+          </div>
+        `;
+        expensesList.appendChild(li);
+      });
+    }
+    
+    // Delete expense
+    function deleteExpense(id) {
+      let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+      expenses = expenses.filter(expense => expense.id !== id);
+      localStorage.setItem("expenses", JSON.stringify(expenses));
+      renderExpenses();
+      
+      // Update budget if on budget screen
+      if (!budgetCard.classList.contains("hidden")) {
+        updateBudgetProgress();
+      }
+    }
+    
+    // Clear all expenses
+    function clearExpenses() {
+      if (confirm("Are you sure you want to delete all expenses?")) {
+        localStorage.removeItem("expenses");
+        renderExpenses();
+        
+        // Update budget if on budget screen
+        if (!budgetCard.classList.contains("hidden")) {
+          updateBudgetProgress();
+        }
+      }
+    }
+    
+    // Save budget
+    function saveBudget() {
+      const period = budgetPeriod.value;
+      const amount = parseFloat(budgetAmount.value);
+      const currency = budgetCurrency.value;
+      
+      if (isNaN(amount) || amount <= 0) {
+        alert("Please enter a valid budget amount");
+        return;
+      }
+      
+      const budget = {
+        period: period,
+        amount: amount,
+        currency: currency,
+        createdAt: Date.now()
+      };
+      
+      localStorage.setItem("budget", JSON.stringify(budget));
+      updateBudgetProgress();
+      alert("Budget saved successfully!");
+    }
+    
+    // Load budget
+    function loadBudget() {
+      const budget = JSON.parse(localStorage.getItem("budget")) || {};
+      
+      if (budget.period) {
+        budgetPeriod.value = budget.period;
+      }
+      
+      if (budget.amount) {
+        budgetAmount.value = budget.amount;
+      }
+      
+      if (budget.currency) {
+        budgetCurrency.value = budget.currency;
+      }
+      
+      updateBudgetProgress();
+    }
+    
+    // Get start of week (Sunday)
+    function getStartOfWeek(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = d.getDate() - day;
+      const startOfWeek = new Date(d.setDate(diff));
+      startOfWeek.setHours(0, 0, 0, 0);
+      return startOfWeek;
+    }
+    
+    // Update budget progress
+    function updateBudgetProgress() {
+      const budget = JSON.parse(localStorage.getItem("budget")) || {};
+      const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+      const period = budgetPeriod.value;
+      const budgetCurrency = budget.currency || "USD";
+      
+      if (!budget.amount) {
+        // No budget set
+        budgetProgressBar.style.width = "0%";
+        spentAmount.textContent = `0 ${budgetCurrency} spent`;
+        remainingAmount.textContent = `0 ${budgetCurrency} remaining`;
+        budgetSummaryAmount.textContent = `0 ${budgetCurrency}`;
+        budgetSummarySpent.textContent = `0 ${budgetCurrency}`;
+        budgetSummaryRemaining.textContent = `0 ${budgetCurrency}`;
+        return;
+      }
+      
+      // Calculate time range based on period
+      const now = new Date();
+      let startDate;
+      
+      if (period === "week") {
+        // Start of current week (Sunday)
+        startDate = getStartOfWeek(now);
+      } else {
+        // Start of current month
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      }
+      
+      // Filter expenses for current period and matching currency
+      const periodExpenses = expenses.filter(expense => {
+        return expense.timestamp >= startDate.getTime() && 
+               expense.currency === budgetCurrency;
+      });
+      
+      // Calculate total spent
+      const totalSpent = periodExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+      const remaining = Math.max(0, budget.amount - totalSpent);
+      const percentage = Math.min(100, (totalSpent / budget.amount) * 100);
+      
+      // Update UI
+      budgetProgressBar.style.width = `${percentage}%`;
+      budgetProgressBar.classList.toggle("over-budget", totalSpent > budget.amount);
+      
+      spentAmount.textContent = `${totalSpent.toFixed(2)} ${budgetCurrency} spent`;
+      remainingAmount.textContent = `${remaining.toFixed(2)} ${budgetCurrency} remaining`;
+      
+      budgetSummaryAmount.textContent = `${budget.amount.toFixed(2)} ${budgetCurrency}`;
+      budgetSummarySpent.textContent = `${totalSpent.toFixed(2)} ${budgetCurrency}`;
+      budgetSummaryRemaining.textContent = `${remaining.toFixed(2)} ${budgetCurrency}`;
+    }
+    
+    // Clear all app data
+    function clearAllData() {
+      if (confirm("Are you sure you want to delete ALL app data? This cannot be undone.")) {
+        localStorage.clear();
+        renderHistory();
+        renderExpenses();
+        loadBudget();
+        alert("All data has been cleared.");
+        switchApp('addExpense');
+      }
+    }
+    
+    // Switch between apps
+    function switchApp(app) {
+      // Hide all cards first
+      converterCard.classList.add("hidden");
+      addExpenseCard.classList.add("hidden");
+      viewExpensesCard.classList.add("hidden");
+      budgetCard.classList.add("hidden");
+      settingsCard.classList.add("hidden");
+      
+      // Remove active class from all buttons
+      converterBtn.classList.remove("active");
+      expensesBtn.classList.remove("active");
+      budgetBtn.classList.remove("active");
+      
+      // Show selected card and set active button
+      if (app === 'converter') {
+        converterCard.classList.remove("hidden");
+        converterBtn.classList.add("active");
+      } else if (app === 'addExpense') {
+        addExpenseCard.classList.remove("hidden");
+        expensesBtn.classList.add("active");
+      } else if (app === 'viewExpenses') {
+        viewExpensesCard.classList.remove("hidden");
+        renderExpenses(); // Refresh the list when viewing
+      } else if (app === 'budget') {
+        budgetCard.classList.remove("hidden");
+        budgetBtn.classList.add("active");
+        loadBudget(); // Load budget data when viewing
+      } else if (app === 'settings') {
+        settingsCard.classList.remove("hidden");
+        // No button to highlight for settings
+      }
+    }
+    
+    // Toggle dark mode
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+      darkModeSwitch.checked = isDark;
+    }
+    
+    // Initialize
+    window.onload = () => {
+      populateCurrencies();
+      renderHistory();
+      renderExpenses();
+      loadBudget();
+      
+      // Set dark mode if previously enabled
+      if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark");
+        darkModeSwitch.checked = true;
+      }
+      
+      // Set add expense as default view
+      switchApp('addExpense');
+      
+      // Add event listener for Enter key
+      document.getElementById("amount").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          convertCurrency();
+        }
+      });
+      
+      document.getElementById("expenseAmount").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          addExpense();
+        }
+      });
+      
+      document.getElementById("budgetAmount").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          saveBudget();
+        }
+      });
+    };
+  </script>
+</body>
+</html>
